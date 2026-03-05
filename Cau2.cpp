@@ -1,20 +1,99 @@
-// Cau2.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+#include<iostream>
+using namespace std;
 
-#include <iostream>
+//Cấu trúc phân số
+struct PhanSo
+{
+	int tu, mau;
+};
+
+//Hàm nhập phân số x từ bàn phím, nếu mẫu số bằng 0 thì yêu cầu nhập lại
+void Nhap(PhanSo& x)
+{
+	while (cin >> x.tu >> x.mau)
+	{
+		if (x.mau == 0)
+		{
+			continue; //Mẫu số bằng 0 thì nhập lại
+		}
+		else
+		{
+			break; //Mẫu số khác 0 thì thoát khỏi vòng lặp
+		}
+	}
+}
+
+//Hàm tìm ước chung lớn nhất của 2 số nguyên và trả về ước chung lớn nhất của 2 số đó
+int UCLN(int tu, int mau)
+{
+	tu = abs(tu);   //lấy giá trị tuyệt đối
+	mau = abs(mau);
+
+	while (mau != 0)
+	{
+		int r = tu % mau;
+		tu = mau;
+		mau = r;
+	}
+	return tu;
+}
+
+//Hàm rút gọn phân số và chuẩn hoá dạng của phân số
+void RutGon(PhanSo& x)
+{
+	int ucln = UCLN(x.tu, x.mau);
+	x.tu /= ucln;
+	x.mau /= ucln;
+
+	//Chuẩn hoá mẫu số phải dương
+	if (x.mau < 0)
+	{
+		x.tu = -x.tu;
+		x.mau = -x.mau;
+	}
+}
+
+//Hàm xuất phân số đã rút gọn theo dạng chuẩn
+void Xuat(PhanSo x)
+{
+	RutGon(x);
+	//Nếu mẫu = 1 thì in ra tử
+	if (x.mau == 1)
+	{
+		cout << x.tu;
+	}
+	//Nếu tử = 0 thì in ra 0
+	else if (x.tu == 0)
+	{
+		cout << 0;
+	}
+	//Các trường hợp còn lại thì in ra theo dạng chuẩn của phân số
+	else
+	{
+		cout << x.tu << "/" << x.mau;
+	}
+}
+
+//Hàm so sánh 2 phân số bằng các quy đồng, so sánh tử số và xuất ra phân số lớn hơn
+void SoSanh2PhanSo(PhanSo x, PhanSo y)
+{
+	//Nếu tử số của x lớn hơn 
+	if (x.tu * y.mau > y.tu * x.mau)
+	{
+		Xuat(x);
+	}
+	//Nếu tử số của y lớn hơn
+	else
+	{
+		Xuat(y);
+	}
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	PhanSo x, y;
+	Nhap(x);
+	Nhap(y);
+	SoSanh2PhanSo(x, y);
+	return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
